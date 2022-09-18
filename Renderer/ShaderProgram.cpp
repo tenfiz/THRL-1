@@ -1,15 +1,17 @@
 #include "ShaderProgram.h"
 
 namespace Renderer {
-    ShaderProgram::ShaderProgram(const std::string &vertexShader, const std::string &fragmentShader){
+    ShaderProgram::ShaderProgram(const std::string &vertexShader, const std::string &fragmentShader) {
+        // Compile vertex shader
         GLuint vertexShaderID;
-        if (!createShader(vertexShader, GL_VERTEX_SHADER, vertexShaderID)) {
+        if (!compileShader(vertexShader, GL_VERTEX_SHADER, vertexShaderID)) {
             std::cerr << "VERTEX SHADER: compile-time error" << std::endl;
             return;
         }
 
+        // Compile fragment shader
         GLuint fragmentShaderID;
-        if (!createShader(fragmentShader, GL_FRAGMENT_SHADER, fragmentShaderID)) {
+        if (!compileShader(fragmentShader, GL_FRAGMENT_SHADER, fragmentShaderID)) {
             std::cerr << "FRAGMENT: compile-time error" << std::endl;
             glDeleteShader(vertexShaderID);
             return;
@@ -24,17 +26,18 @@ namespace Renderer {
         glGetProgramiv(m_ID, GL_LINK_STATUS, &programLinkStatus);
         if(!programLinkStatus) {
             GLchar log[1024];
-            glGetShaderInfoLog(m_ID, 1024, nullptr, log);
+            glGetProgramInfoLog(m_ID, 1024, nullptr, log);
             std::cerr << "SHADER ERROR: link-time error\n" << log << std::endl;
         } else {
+            // Shader program was created
             m_isShadersCompiled = true;
         }
 
+        // Delete the shaders, because the shader program has already been created
         glDeleteShader(vertexShaderID);
         glDeleteShader(fragmentShaderID);
     }
-
-    bool ShaderProgram::createShader(const std::string &source, const GLenum shaderType, GLuint &shaderID) {
+    bool ShaderProgram::compileShader(const std::string &source, const GLenum shaderType, GLuint &shaderID) {
         shaderID = glCreateShader(shaderType);
         const char* code = source.c_str();
         glShaderSource(shaderID, 1, &code, nullptr);

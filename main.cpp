@@ -8,6 +8,12 @@
 using namespace std;
 
 
+// |--IMPORTANT!----------------------------------------------------------------------------------------
+// | The code will be completely rewritten. Therefore, it is better not to read this code without beer |
+// | Now the code draw a multicolored right triangle on a red background                               |
+// | The code uses standard OpenGL initialization, taken from the glad documentation                   |
+// |----------------------------------------------------------------------------------------------------
+
 int glfwWindowWidth = 640;
 int glfwWindowHeight = 480;
 
@@ -47,7 +53,7 @@ void glfwWindowSizeCallback([[maybe_unused]] GLFWwindow* pWindow, int width, int
     glViewport(0, 0, glfwWindowWidth, glfwWindowHeight);
 }
 
-void glfwKeyCallback([[maybe_unused]] GLFWwindow* pWindow, int key, int scancode, int action, int mode) {
+void glfwKeyCallback(GLFWwindow* pWindow, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(pWindow, GL_TRUE);
 }
